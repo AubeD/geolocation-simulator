@@ -6,7 +6,7 @@
   "version": "1.0.0",
   "main": "background.js",
   "scripts": {
-    "clean": "rm -rf dist",
+    "clean": "rimraf dist",
     "make-dist": "mkdir dist",
     "copy:single": "cpy \"{manifest.json,panel.html,background.js,styles.css}\" dist",
     "copy:js": "cpy \"js/**/*\" dist/js",
@@ -14,7 +14,7 @@
     "copy:images": "cpy \"images/**/*\" dist/images",
     "copy:monaco": "cpy \"node_modules/monaco-editor/min/vs/**/*\" dist/node_modules/monaco-editor/min/vs",
     "copy": "npm run clean && npm run make-dist && npm run copy:single && npm run copy:js && npm run copy:lib && npm run copy:images && npm run copy:monaco",
-    "zip": "cd dist && zip -r ../geolocation.zip .",
+    "zip": "cross-zip dist geolocation.zip",
     "package": "npm run copy && npm run zip"
   },
   "keywords": [],
@@ -25,6 +25,8 @@
   },
   "description": "Used to simulate geolocation in the browser.",
   "devDependencies": {
-    "cpy": "^11.1.0"
+    "cpy-cli": "^4.2.0",
+    "cross-zip-cli": "^1.0.0",
+    "rimraf": "^5.0.0"
   }
 }

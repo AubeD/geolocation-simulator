@@ -65,6 +65,9 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     });
     
     console.log('Mock location updated:', mockGeolocation);
+
+    // Broadcast to all tabs so content scripts can update
+    broadcastMockLocation();
     
     // 更新所有已连接标签页的模拟位置
     updateAllTabsGeolocation();
@@ -274,6 +277,25 @@ async function updateAllTabsGeolocation() {
         console.error(`Error updating mock location for tab ${tabId}:`, error);
       });
   }
+}
+
+/**
+ * Broadcast the current mock location to all open tabs so that
+ * the content script can forward it into the page context.
+ */
+function broadcastMockLocation() {
+  if (!mockGeolocation) return;
+  chrome.tabs.query({}, function(tabs) {
+    for (const tab of tabs) {
+      if (!tab.id) continue;
+      chrome.tabs.sendMessage(tab.id, {
+        action: 'mockLocationUpdate',
+        latitude: mockGeolocation.latitude,
+        longitude: mockGeolocation.longitude,
+        accuracy: mockGeolocation.accuracy
+      }, () => {});
+    }
+  });
 }
 
 console.log('Background script loaded');
