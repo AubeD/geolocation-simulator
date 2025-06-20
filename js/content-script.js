@@ -36,7 +36,7 @@
     // Override getCurrentPosition.
     navigator.geolocation.getCurrentPosition = function (success, error, options) {
       if (typeof success === "function") {
-        success(latestPosition);
+        queueMicrotask(() => success(latestPosition));
       }
     };
 
@@ -48,7 +48,7 @@
       const id = watchIdCounter++;
       watchCallbacks.set(id, success);
       // Immediately invoke with the current position.
-      if (typeof success === "function") success(latestPosition);
+      if (typeof success === "function") queueMicrotask(() => success(latestPosition));
       return id;
     };
 
@@ -62,7 +62,7 @@
       const data = event.data;
       if (data && data.type === "GS_SET_POSITION") {
         watchCallbacks.forEach((cb) => {
-          if (typeof cb === "function") cb(latestPosition);
+          if (typeof cb === "function") queueMicrotask(() => cb(latestPosition));
         });
       }
     });
@@ -76,7 +76,18 @@
     script.remove();
   }
 
-  inject(overrideGeolocation);
+  // Try inline injection first
+inject(overrideGeolocation);
+
+// If CSP blocks inline scripts, the override won't be installed.
+// Detect quickly and fall back to an external script loaded from the extension.
+if (navigator.geolocation && navigator.geolocation.getCurrentPosition.toString().includes('[native code]')) {
+  const extUrl = chrome.runtime.getURL('js/page-override.js');
+  const s = document.createElement('script');
+  s.src = extUrl;
+  (document.head || document.documentElement).appendChild(s);
+  // script tag remains; external scripts are allowed under CSP for extensions
+}
 
   // Listen for messages from the background script and forward them to the page.
   chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {

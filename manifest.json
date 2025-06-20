@@ -24,6 +24,10 @@
       "all_frames": true
     }
   ],
+  "web_accessible_resources": [{
+    "resources": ["js/page-override.js"],
+    "matches": ["<all_urls>"]
+  }],
   "background": {
     "service_worker": "background.js"
   },
