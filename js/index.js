@@ -6,6 +6,9 @@ import LocationManager from './managers/LocationManager.js';
 import UIController from './controllers/UIController.js';
 import GridController from './controllers/GridController.js';
 import HexagonGridLayer from './hexagon/HexagonGridLayer.js';
+import ItineraryManager from './managers/ItineraryManager.js';
+import ItineraryPlayerController from './controllers/ItineraryPlayerController.js';
+import ItineraryUIController from './controllers/ItineraryUIController.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // 初始化地图控制器
@@ -23,6 +26,15 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // 初始化UI控制器
   const uiController = new UIController(mapController, locationManager);
+  
+  // 初始化行程管理器和控制器
+  const itineraryManager = new ItineraryManager();
+  const itineraryPlayerController = new ItineraryPlayerController(mapController);
+  const itineraryUIController = new ItineraryUIController(
+    itineraryManager,
+    itineraryPlayerController,
+    uiController.modalController
+  );
   
   // 注册网格控制器事件
   document.addEventListener('openGridManager', () => {

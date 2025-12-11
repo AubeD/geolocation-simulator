@@ -46,6 +46,7 @@
     <button id="manageLocations" title="Manage saved locations"><i class="fas fa-list"></i></button>
     <button id="manageGrids" title="Manage hexagon grid"><img src="images/bee.png" alt="bee"
         style="width: 16px; height: 16px;"></button>
+    <button id="manageItineraries" title="Manage itineraries"><i class="fas fa-route"></i></button>
   </div>
 
   <!-- Save location modal -->
@@ -82,6 +83,40 @@
     </div>
   </div>
 
+  <!-- Itinerary management modal -->
+  <div id="manageItinerariesModal" class="modal">
+    <div class="modal-content hexagon-grid-modal">
+      <div class="grid-header">
+        <div class="header-left">
+          <button class="back-btn" id="closeItinerariesModal"><i class="fas fa-arrow-left"></i></button>
+          <h2 class="grid-title">Itineraries</h2>
+        </div>
+        <div class="header-right">
+          <button id="importItineraryButton" class="action-btn" title="Import GeoJSON itinerary"><i class="fas fa-arrow-down"></i></button>
+        </div>
+      </div>
+
+      <div id="itinerariesContainer" class="grids-container">
+        <!-- Itinerary cards will be dynamically inserted here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Playback controls overlay -->
+  <div id="playbackControls" class="playback-controls">
+    <div class="playback-header">
+      <span id="playbackItineraryName" class="playback-name">Itinerary</span>
+      <span id="playbackStatus" class="playback-status">0 / 0</span>
+    </div>
+    <div id="playbackProgress" class="playback-progress">
+      <div id="playbackProgressBar" class="playback-progress-bar"></div>
+    </div>
+    <div class="playback-buttons">
+      <button id="playPauseBtn" class="playback-btn" title="Play/Pause"><i class="fas fa-pause"></i></button>
+      <button id="stopPlaybackBtn" class="playback-btn" title="Stop"><i class="fas fa-stop"></i></button>
+    </div>
+  </div>
+
   <!-- Grid management modal -->
   <div id="manageGridsModal" class="modal">
     <div class="modal-content hexagon-grid-modal">
@@ -104,6 +139,7 @@
   </div>
 
   <input type="file" id="importInput" style="display: none">
+  <input type="file" id="importItineraryInput" accept=".json,.geojson" style="display: none">
 
   <!-- Leaflet JS -->
   <script src="lib/leaflet.js"></script>
