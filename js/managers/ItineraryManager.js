@@ -81,9 +81,16 @@ class ItineraryManager {
 
       const properties = feature.properties || {};
       const timestamps = properties.timestamps;
+      const accuracies = properties.accuracies;
       
       if (!Array.isArray(timestamps) || timestamps.length !== coordinates.length) {
         console.error('Invalid GeoJSON: timestamps must match coordinates length');
+        return null;
+      }
+
+      // Validate accuracies if present
+      if (accuracies && (!Array.isArray(accuracies) || accuracies.length !== coordinates.length)) {
+        console.error('Invalid GeoJSON: accuracies must match coordinates length');
         return null;
       }
 
@@ -93,6 +100,7 @@ class ItineraryManager {
         name: `Itinerary ${this.savedItineraries.length + 1}`,
         coordinates: coordinates,
         timestamps: timestamps,
+        accuracies: accuracies || null,
         config: properties.config || {},
         createdAt: new Date().toISOString(),
         waypointCount: coordinates.length,
@@ -129,7 +137,8 @@ class ItineraryManager {
         },
         properties: {
           config: itinerary.config,
-          timestamps: itinerary.timestamps
+          timestamps: itinerary.timestamps,
+          ...(itinerary.accuracies && { accuracies: itinerary.accuracies })
         }
       }]
     };

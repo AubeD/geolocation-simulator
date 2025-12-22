@@ -202,9 +202,10 @@ class MapController {
    * Update geolocation
    * @param {number} lat - Latitude
    * @param {number} lng - Longitude
+   * @param {number} accuracy - Accuracy in meters (default: 10)
    */
-  updateGeolocation(lat, lng) {
-    console.log(`Updating mock location: Latitude ${lat}, Longitude ${lng}`);
+  updateGeolocation(lat, lng, accuracy = 10) {
+    console.log(`Updating mock location: Latitude ${lat}, Longitude ${lng}, Accuracy ${accuracy}m`);
     
     // Update UI display
     this.latElement.textContent = lat.toFixed(6);
@@ -214,7 +215,7 @@ class MapController {
     const mockPosition = {
       latitude: lat,
       longitude: lng,
-      accuracy: 10,
+      accuracy: accuracy,
       altitude: null,
       altitudeAccuracy: null,
       heading: null,

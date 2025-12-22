@@ -43,10 +43,11 @@ class ItineraryPlayerController {
     const coords = itinerary.coordinates[0];
     const lng = coords[0];
     const lat = coords[1];
+    const accuracy = itinerary.accuracies ? itinerary.accuracies[0] : 10;
 
     this.mapController.marker.setLatLng([lat, lng]);
     this.mapController.map.setView([lat, lng], this.mapController.map.getZoom());
-    this.mapController.updateGeolocation(lat, lng);
+    this.mapController.updateGeolocation(lat, lng, accuracy);
 
     // 触发进度回调
     if (this.onProgress) {
@@ -201,10 +202,11 @@ class ItineraryPlayerController {
     // GeoJSON坐标是 [lng, lat]，需要转换为 [lat, lng]
     const lng = coords[0];
     const lat = coords[1];
+    const accuracy = itinerary.accuracies ? itinerary.accuracies[this.currentIndex] : 10;
 
     // 更新地图位置
     this.mapController.marker.setLatLng([lat, lng]);
-    this.mapController.updateGeolocation(lat, lng);
+    this.mapController.updateGeolocation(lat, lng, accuracy);
 
     // 触发进度回调
     if (this.onProgress) {
